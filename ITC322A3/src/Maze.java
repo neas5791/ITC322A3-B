@@ -219,6 +219,7 @@ public class Maze {
 	
 	}
 
+	@SuppressWarnings("unchecked")
 	public void printPath(){
 		
 		Stack<Integer> newStack = new Stack<Integer>();
@@ -240,6 +241,7 @@ public class Maze {
 		System.out.println(path);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void updateMazeWithPath(){
 		int i;
 		
@@ -248,9 +250,7 @@ public class Maze {
 		// reverse the stack
 		while (!stackCopy.empty())
 			reverseStack.push(stackCopy.pop());
-		
-		
-		
+					
 		while (!reverseStack.empty()){
 			i = reverseStack.pop();
 			//System.out.printf("%d\t=>\tmaze[%d][%d]\n", i, 1 + (i/col) * 2, 1 + (i%col) * 2);
@@ -281,7 +281,6 @@ public class Maze {
 	 * 	This method has been overriden to output a graphical representation of the maze
 	 * 
 	 */
-	
 	public String toString(){
 		String screen = "";
 		
@@ -302,6 +301,7 @@ public class Maze {
 	
 	public void shortestPath(){
 		Dijkstra dijkstra = new Dijkstra(g);
-		dijkstra.ShortestPath();
+		dijkstra.ShortestPath(0,g.size());
+		dijkstra.displayResult(dijkstra.getShortestPath(0, g.size()-1));
 	}
 }

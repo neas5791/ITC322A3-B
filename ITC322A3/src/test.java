@@ -3,10 +3,10 @@
 public class test {
 
 	public static void main (String[] args){
-		Maze m = new Maze("maze01.mz");
+		Maze m = new Maze("maze03.mz");
 		System.out.println(m.toString());
 		
-		
+		//m.printTable();
 		m.shortestPath();
 		// this actually displays the adjacency Matrix of the graph on the screen 
 		// and output a copy to a file
