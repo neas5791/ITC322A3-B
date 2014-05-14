@@ -49,10 +49,11 @@ public class DSP {
 			// Array of vertices connected to current vertex
 			int[] neighbor = g.neighbors(current);
 			int nextNeighbor = -1;
-			int smallestDistance = Integer.MAX_VALUE;
+			int smallestDistance = -1;
 			
 			for (int i = 0; i < neighbor.length; i++)
-				allowed.add(neighbor[i]);
+				if (!visited[neighbor[i]])
+					allowed.add(neighbor[i]);
 					
 			for (int i = 0; i < neighbor.length; i++){
 				
@@ -69,7 +70,7 @@ public class DSP {
 				int newDistance;
 				// catches overflow problem... because the vertex is neighboring we 
 				// know there will be weight information
-				if (distance[current] == Integer.MAX_VALUE)
+				if (distance[current] == -1)
 					newDistance = weight[current][testVertex];
 				else
 					newDistance = distance[current] + weight[current][testVertex];
@@ -83,23 +84,47 @@ public class DSP {
 				}
 				
 				// keep tabs on which of the distances is the smallest
-				if (distance[i] < smallestDistance ){
+	/*			if (smallestDistance == -1 || distance[testVertex] < smallestDistance ){
 					smallestDistance = distance[testVertex];
 					nextNeighbor = testVertex;
-				}
+				}*/
 			}
 			
-			if (nextNeighbor == -1)
-				nextNeighbor = allowed.poll();
 			
-			current = nextNeighbor;
+			int min = Integer.MAX_VALUE;
+			if (nextNeighbor == -1){
+				for (int vertex : allowed){
+					if (distance[vertex] < min)
+						min = distance[vertex];
+						nextNeighbor = vertex;
+				}
+				allowed.remove(nextNeighbor);
+				current = nextNeighbor;
+			}
+			else {
+				allowed.remove(nextNeighbor);
+				current = nextNeighbor;
+			}
 		}
 		
 		for (int i = 0; i < distance.length; i++)
 			if (distance[i] != Integer.MAX_VALUE)
-				System.out.println("Vertex " + i + " is a distance " + distance[i]);
+				System.out.printf("Vertex %4d is a distance %4d  from Vertex %d\n" , i , distance[i] , source);
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private int [][] constructWeightArray(){
 		
 		this.weight = new int [n][n];

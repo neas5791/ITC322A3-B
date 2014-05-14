@@ -5,7 +5,7 @@ import edu.colorado.graphs.DSP;
 public class test {
 
 	public static void main (String[] args){
-		Maze m = new Maze("maze02.mz");
+		Maze m = new Maze("maze01.mz");
 		System.out.println(m.toString());
 		
 		
