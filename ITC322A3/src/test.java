@@ -5,13 +5,14 @@ import edu.colorado.graphs.DSP;
 public class test {
 
 	public static void main (String[] args){
-		Maze m = new Maze("maze01.mz");
+		Maze m = new Maze("maze02.mz");
 		System.out.println(m.toString());
 		
 		
 		DSP d = new DSP(m.g);
 		
 		d.buildSpanningTree(0, m.g.size()-1);
+		d.displayResult(d.getShortestPath(0, m.g.size()-1));
 		//m.printTable();
 		// **m.shortestPath();
 		// this actually displays the adjacency Matrix of the graph on the screen 
