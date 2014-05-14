@@ -12,7 +12,8 @@ public class Maze {
 	private int row;
 	private int col;
 	public Graph g;
-	Stack<Integer> depthFirst;// =  new Stack<Integer>();
+	private int[] visited;
+	Stack<Integer> depthFirst;
 	
 	/**
 	 *  Constructor for the maze object. This object is developed from the details found in the maze "filename".  

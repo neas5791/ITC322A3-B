@@ -4,18 +4,20 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 
-public class DSP {
+public class DSP_V2 extends Graph {
 
-	private Graph g;
+	//private Graph g;
 	private int n;
 	private int[][] weight;
 	private int[] distance;
 	private int[] precede;
-
+	private int[] shortestPath;
 	
-	public DSP(Graph g) {
-		this.g = g;
-		this.n = g.size();
+	public DSP_V2(Graph g) {
+		this.edges = g.edges;
+		this.labels = g.labels;
+		
+		this.n = size();
 		this.weight = constructWeightArray();
 		this.distance = new int[n];
 		this.precede = new int [n];
@@ -47,9 +49,8 @@ public class DSP {
 			}
 			
 			// Array of vertices connected to current vertex
-			int[] neighbor = g.neighbors(current);
+			int[] neighbor = neighbors(current);
 			int nextNeighbor = -1;
-			int smallestDistance = -1;
 			
 			for (int i = 0; i < neighbor.length; i++)
 				if (!visited[neighbor[i]])
@@ -82,17 +83,12 @@ public class DSP {
 					distance[testVertex] = newDistance;
 					precede[testVertex] = current;
 				}
-				
-				// keep tabs on which of the distances is the smallest
-	/*			if (smallestDistance == -1 || distance[testVertex] < smallestDistance ){
-					smallestDistance = distance[testVertex];
-					nextNeighbor = testVertex;
-				}*/
 			}
 			
-			
+			// The thinking part of the implementation...
+			// 
 			int min = Integer.MAX_VALUE;
-			if (nextNeighbor == -1){
+			//if (nextNeighbor == -1){
 				for (int vertex : allowed){
 					if (distance[vertex] < min)
 						min = distance[vertex];
@@ -100,12 +96,14 @@ public class DSP {
 				}
 				allowed.remove(nextNeighbor);
 				current = nextNeighbor;
-			}
-			else {
-				allowed.remove(nextNeighbor);
-				current = nextNeighbor;
-			}
+			//}
+			//else {
+			//	allowed.remove(nextNeighbor);
+			//	current = nextNeighbor;
+			//}
 		}
+		
+		shortestPath = getShortestPath(source, destination);
 		
 		for (int i = 0; i < distance.length; i++)
 			if (distance[i] != Integer.MAX_VALUE)
@@ -133,7 +131,7 @@ public class DSP {
 		// construct the weight array
 		for (int i = 0; i < n; i++){
 			for (int j = 0; j < n; j++){
-				if(g.edges[i][j])
+				if(this.edges[i][j])
 					weight[i][j] = 1;
 				else
 					weight[i][j] = 0;

@@ -1,4 +1,5 @@
-import edu.colorado.graphs.DSP;
+//import edu.colorado.graphs.DSP;
+import edu.colorado.graphs.DSP_V2;
 
 
 
@@ -8,8 +9,9 @@ public class test {
 		Maze m = new Maze("maze01.mz");
 		System.out.println(m.toString());
 		
+		//DSP d = new DSP(m.g); // this worked!!
 		
-		DSP d = new DSP(m.g);
+		DSP_V2 d = new DSP_V2(m.g);
 		
 		d.buildSpanningTree(0, m.g.size()-1);
 		d.displayResult(d.getShortestPath(0, m.g.size()-1));
@@ -25,7 +27,7 @@ public class test {
 
 		//m.printPath();
 		
-		//m.updateMazeWithPath();
+		m.updateMazeWithPath();
 //		m.g.depthFirstPrint(m.g, 0);
 		//System.out.println(m.toString());
 	}

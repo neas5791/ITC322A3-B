@@ -8,7 +8,7 @@ public class Driver {
 	private static String name;
 	
 	public static void main (String [] args){
-		//Maze m;
+	
 		boolean quit = false;
 		int menu;
 		do{
@@ -21,8 +21,8 @@ public class Driver {
 				
 			System.out.print("This program will demonstrate the implemented features of the Maze Class.\n"
 							+ "\nSelect from the following menu by entering menu number at the prompt."
-							+ "\n1. Load Maze a file."
-							+ "\n2. Display Maze"
+							+ "\n1. Load Maze a file." // working
+							+ "\n2. Display Maze"  // working
 							+ "\n3. Find path using Depth-First-Search"
 							+ "\n4. "
 							+ "\n5. "
