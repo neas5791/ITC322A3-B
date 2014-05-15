@@ -6,12 +6,20 @@ import java.util.Queue;
 
 public class DSP_V2 extends Graph {
 
-	//private Graph g;
 	private int n;
 	private int[][] weight;
 	private int[] distance;
 	private int[] precede;
+	@SuppressWarnings("unused")
 	private int[] shortestPath;
+	
+	public DSP_V2(int n){
+		super(n);
+		this.n = size();
+		this.weight = constructWeightArray();
+		this.distance = new int[n];
+		this.precede = new int [n];
+	}
 	
 	public DSP_V2(Graph g) {
 		this.edges = g.edges;
@@ -38,16 +46,10 @@ public class DSP_V2 extends Graph {
 		distance[source] = 0;
 		// Set current/source cell to visited
 		
-		
-		
 		// Begin iterating through the tree
 		while ( current != destination){
 			visited[current] = true;
-			
-			if (current == 6) {
-				System.out.println("SIX");
-			}
-			
+	
 			// Array of vertices connected to current vertex
 			int[] neighbor = neighbors(current);
 			int nextNeighbor = -1;
@@ -103,14 +105,15 @@ public class DSP_V2 extends Graph {
 			//}
 		}
 		
-		shortestPath = getShortestPath(source, destination);
+		this.shortestPath = getShortestPath(source, destination);
+	}
+
+	public void printDistance(){
 		
 		for (int i = 0; i < distance.length; i++)
 			if (distance[i] != Integer.MAX_VALUE)
-				System.out.printf("Vertex %4d is a distance %4d  from Vertex %d\n" , i , distance[i] , source);
+				System.out.printf("Vertex %4d is a distance %4d\n" , i , distance[i]);
 	}
-
-	
 	
 	
 	

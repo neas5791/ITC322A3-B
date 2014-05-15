@@ -1,4 +1,9 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
+
+import edu.colorado.graphs.DSP_V2;
 
 
 public class Driver {
@@ -8,23 +13,24 @@ public class Driver {
 	private static String name;
 	
 	public static void main (String [] args){
-	
+		
+		//load a small maze by default
+		name = "maze01.mz";
+		m = new Maze(name);
+		
 		boolean quit = false;
 		int menu;
 		do{
-			if (m == null)
-				System.out.println("Welcome to the Maze Driver by Sean Matkovich #11187033\n"
-							+ "========================================================");
-			else
-				System.out.println("File " + name + " loaded\n"
-						+ "==================================");
+			System.out.println("\nWelcome to the Maze Driver by Sean Matkovich #11187033\nMaze file " + name + " currently loaded\n"
+							 + "========================================================");
+			
 				
 			System.out.print("This program will demonstrate the implemented features of the Maze Class.\n"
 							+ "\nSelect from the following menu by entering menu number at the prompt."
 							+ "\n1. Load Maze a file." // working
 							+ "\n2. Display Maze"  // working
 							+ "\n3. Find path using Depth-First-Search"
-							+ "\n4. "
+							+ "\n4. Find shortest path using Dijkstra's Algorithm"
 							+ "\n5. "
 							+ "\n6. "
 							+ "\n7. "
@@ -37,22 +43,31 @@ public class Driver {
 				loadMazeMenu();
 				break;
 			case 2:
+				System.out.println();
 				if (m != null)
 					System.out.println(m.toString());
+				
+				suspend("Press enter to continue....");
 				break;
 			case 3:
 				if (m != null) {
-					boolean[] visited = new boolean[m.g.size()];
-					m.DepthFirstSolution(0, visited);
+					// boolean[] visited = new boolean[m.g.size()];
+					// m.DepthFirstSolution(0, visited);
 					
-					System.out.println("The vertex path is as follows; ");
-					m.printPath();
-					m.updateMazeWithPath();
+					System.out.println("The vertices indexes of the depth first approach path are:");
+					m.printDepthFirst(0);
+					System.out.println();
+					//m.printPath();
+					// m.updateMazeWithPath();
 					System.out.println(m.toString());
+					suspend("Press enter to continue....");
 				}
 				break;
 			case 4:
-
+				m.shortestPath(0, m.size() - 1);
+				System.out.println(m.toString());
+				suspend("Press enter to continue....");
+				break;
 			case 5:
 
 			case 6:
@@ -106,5 +121,26 @@ public class Driver {
 		}while (!quit);
 		
 		
+	}
+	
+	/**
+	 * Method to halt screen an wait for input before proceeding
+	 * @param str is the String contents for display when halted
+	 */
+	private static void suspend(String str){
+		// create a buffer to capture system.in activity
+		BufferedReader buf = new BufferedReader (new InputStreamReader (System.in));
+		
+		String ent = null;
+		
+		
+		do{
+			System.out.println(str);
+			try {
+				ent = buf.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}while(ent.equals("\n"));	
 	}
 }

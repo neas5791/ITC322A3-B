@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.Stack;
 
+import edu.colorado.graphs.DSP_V2;
 import edu.colorado.graphs.Dijkstra;
 import edu.colorado.graphs.Graph;;
 
@@ -12,8 +13,9 @@ public class Maze {
 	private int row;
 	private int col;
 	public Graph g;
-	private int[] visited;
-	Stack<Integer> depthFirst;
+	//private int[] visited;
+	Stack<Integer> depthFirst = new Stack<Integer>();
+	Stack<Integer> shortPath = new Stack<Integer>();
 	
 	/**
 	 *  Constructor for the maze object. This object is developed from the details found in the maze "filename".  
@@ -38,7 +40,7 @@ public class Maze {
 		createMazeFromFile(filename);
 		createGraph();
 	}
-		
+
 	private void createMazeFromFile(String filename){
 		Scanner scanner;
 	
@@ -182,7 +184,7 @@ public class Maze {
    }
 
 	
-	public boolean DepthFirstSolution(int v, boolean [] visited){
+	private boolean DepthFirstSolution(int v, boolean [] visited){
 		// Checks if this vertex is the exit point of the maze
 		if(v == (g.size() - 1)){
 			depthFirst.push(v);
@@ -243,17 +245,16 @@ public class Maze {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void updateMazeWithPath(){
+	private void updateMazeWithPath(Stack<Integer> path){
 		int i;
 		
-		Stack<Integer> stackCopy = (Stack<Integer>) depthFirst.clone();
-		Stack<Integer> reverseStack = new Stack<Integer>();
-		// reverse the stack
-		while (!stackCopy.empty())
-			reverseStack.push(stackCopy.pop());
-					
-		while (!reverseStack.empty()){
-			i = reverseStack.pop();
+		Stack<Integer> stackCopy = (Stack<Integer>) path.clone();
+		
+		for (int z = 0 ; z < size(); z++)
+			maze[1 + (z/col) * 2][1 + (z%col) * 2] = ' ';
+		
+		while (!stackCopy.empty()){
+			i = stackCopy.pop();
 			//System.out.printf("%d\t=>\tmaze[%d][%d]\n", i, 1 + (i/col) * 2, 1 + (i%col) * 2);
 			
 			// check if vertex is goal vertex
@@ -263,16 +264,16 @@ public class Maze {
 			else if (i == 0)
 				maze[1 + (i/col) * 2][1 + (i%col) * 2] = 's';
 			//check if vertex has moved south
-			else if (i - reverseStack.peek() == col) 
+			else if (i - stackCopy.peek() == col) 
 					maze[1 + (i/col) * 2][1 + (i%col) * 2] = '^';
 			//check if vertex has moved north
-			else if (i - reverseStack.peek() == -col)
+			else if (i - stackCopy.peek() == -col)
 				maze[1 + (i/col) * 2][1 + (i%col) * 2] = 'v';
 			//check if vertex has moved west
-			else if (i - reverseStack.peek() == 1)
+			else if (i - stackCopy.peek() == 1)
 				maze[1 + (i/col) * 2][1 + (i%col) * 2] = '<';
 			//check if vertex has moved north
-			else if (i - reverseStack.peek() == -1)
+			else if (i - stackCopy.peek() == -1)
 				maze[1 + (i/col) * 2][1 + (i%col) * 2] = '>';
 		}
 	}
@@ -300,9 +301,53 @@ public class Maze {
 		return screen;
 	}
 	
-	public void shortestPath(){
-		Dijkstra dijkstra = new Dijkstra(g);
-		dijkstra.ShortestPath(0,g.size());
-		dijkstra.displayResult(dijkstra.getShortestPath(0, g.size()-1));
+	public void shortestPath(int start, int destination){
+
+		if (start < 0 || start >= size())
+			throw new IllegalArgumentException("Start vertex does not exist");
+		if (destination < 0 || destination >= size())
+			throw new IllegalArgumentException("Destination vertex does not exist");
+		
+		DSP_V2 d = new DSP_V2(g);
+		d.buildSpanningTree(start, size()-1);
+		
+		shortPath = new Stack<Integer>();
+		
+		for (int x : d.getShortestPath(0, g.size()-1))
+			shortPath.push(x);
+		
+		updateMazeWithPath(shortPath);
+				
+		//                 d.displayResult(d.getShortestPath(0, size()-1));
+		/*
+		((DSP_V2) g).buildSpanningTree(0, g.size() - 1);
+		((DSP_V2) g).displayResult(((DSP_V2) g).getShortestPath(0, g.size()-1));*/
+	}
+	
+	public int size(){
+		return (row * col);
+	}
+	
+	public void printDepthFirst(int start){
+		// holder array for visit results
+		boolean [] visited = new boolean[size()];
+		
+		// Initialize stack
+		depthFirst = new Stack<Integer>();
+		
+		// conduct a depth first search of the graph
+		DepthFirstSolution(start, visited);
+		
+		Stack<Integer> stackCopy = (Stack<Integer>) depthFirst.clone();
+		Stack<Integer> reverseStack = new Stack<Integer>();
+		// reverse the stack
+		while (!stackCopy.empty())
+			reverseStack.push(stackCopy.pop());
+
+		// update the maze array with the path representation
+		updateMazeWithPath(reverseStack);
+		
+		// print the resulting maze updates to the screen
+		printPath();
 	}
 }

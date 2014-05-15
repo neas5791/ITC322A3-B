@@ -13,7 +13,7 @@ public class test {
 		
 		DSP_V2 d = new DSP_V2(m.g);
 		
-		d.buildSpanningTree(0, m.g.size()-1);
+		d.buildSpanningTree(0, m.size()-1);
 		d.displayResult(d.getShortestPath(0, m.g.size()-1));
 		//m.printTable();
 		// **m.shortestPath();
@@ -22,14 +22,16 @@ public class test {
 		//m.printTable();
 		
 		
-		//boolean[] visited = new boolean[m.g.size()];
-		//m.DepthFirstSolution(0, visited);
+		// *boolean[] visited = new boolean[m.size()];
+		// *m.DepthFirstSolution(0, visited);
 
 		//m.printPath();
 		
-		m.updateMazeWithPath();
+		// *m.updateMazeWithPath();
 //		m.g.depthFirstPrint(m.g, 0);
-		//System.out.println(m.toString());
+		
+		m.printDepthFirst(0);
+		System.out.println(m.toString());
 	}
 	
 }
